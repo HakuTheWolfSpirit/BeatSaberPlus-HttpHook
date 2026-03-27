@@ -15,7 +15,7 @@ namespace BeatSaberPlus_HTTPHook
         public void OnEnable()
         {
             ChatPlexMod_ChatIntegrations.ChatIntegrations.RegisterEventType(
-                "HTTPHook",
+                "HTTPHookEvent",
                 () => new ChatIntegrations.Events.HTTPHookEvent(),
                 true
             );
