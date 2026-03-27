@@ -3,6 +3,7 @@ using CP_SDK.XUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 using CI = ChatPlexMod_ChatIntegrations.ChatIntegrations;
@@ -65,9 +66,13 @@ namespace BeatSaberPlus_HTTPHook.ChatIntegrations.Events
             BuildUIAuto(p_Parent);
         }
 
+        private static readonly Regex s_ValidHookName = new Regex(@"^[a-zA-Z0-9_\-]+$", RegexOptions.Compiled);
+
         private void OnHookNameChanged()
         {
-            Model.HookName = m_HookNameInput.Element.GetValue();
+            var l_Value = m_HookNameInput.Element.GetValue();
+            if (l_Value.Length <= 128 && s_ValidHookName.IsMatch(l_Value))
+                Model.HookName = l_Value;
         }
 
         ////////////////////////////////////////////////////////////////////////////

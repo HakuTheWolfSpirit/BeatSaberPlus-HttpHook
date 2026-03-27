@@ -1,13 +1,16 @@
 using System;
-using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace BeatSaberPlus_HTTPHook.Network
 {
     internal class HTTPServer
     {
+        private static readonly Regex s_ValidHookName = new Regex(@"^[a-zA-Z0-9_\-]+$", RegexOptions.Compiled);
+        private const int MAX_HOOK_NAME_LENGTH = 128;
+
         private HttpListener m_Listener;
         private Thread m_Thread;
         private volatile bool m_Running;
@@ -62,13 +65,21 @@ namespace BeatSaberPlus_HTTPHook.Network
                 m_Listener?.Stop();
                 m_Listener?.Close();
             }
-            catch { }
+            catch (Exception l_Exception)
+            {
+                Logger.Instance.Error("[HTTPServer] Error stopping listener");
+                Logger.Instance.Error(l_Exception);
+            }
 
             try
             {
                 m_Thread?.Join(2000);
             }
-            catch { }
+            catch (Exception l_Exception)
+            {
+                Logger.Instance.Error("[HTTPServer] Error joining thread");
+                Logger.Instance.Error(l_Exception);
+            }
 
             m_Listener = null;
             m_Thread = null;
@@ -116,7 +127,7 @@ namespace BeatSaberPlus_HTTPHook.Network
 
                 if (!l_Path.StartsWith("/hook/", StringComparison.OrdinalIgnoreCase))
                 {
-                    SendResponse(l_Response, 404, "{\"error\":\"Not found. Use POST or GET /hook/{hookName}\"}");
+                    SendResponse(l_Response, 404, "{\"error\":\"Not found. Use /hook/{hookName}\"}");
                     return;
                 }
 
@@ -125,6 +136,12 @@ namespace BeatSaberPlus_HTTPHook.Network
                 if (string.IsNullOrEmpty(l_HookName))
                 {
                     SendResponse(l_Response, 400, "{\"error\":\"Hook name is required.\"}");
+                    return;
+                }
+
+                if (l_HookName.Length > MAX_HOOK_NAME_LENGTH || !s_ValidHookName.IsMatch(l_HookName))
+                {
+                    SendResponse(l_Response, 400, "{\"error\":\"Invalid hook name. Use alphanumeric characters, hyphens, and underscores only (max 128 chars).\"}");
                     return;
                 }
 
@@ -140,7 +157,7 @@ namespace BeatSaberPlus_HTTPHook.Network
                 Logger.Instance.Error(l_Exception);
 
                 try { SendResponse(l_Response, 500, "{\"error\":\"Internal server error\"}"); }
-                catch { }
+                catch (Exception) { }
             }
         }
 
@@ -148,12 +165,14 @@ namespace BeatSaberPlus_HTTPHook.Network
         {
             p_Response.StatusCode = p_StatusCode;
             p_Response.ContentType = "application/json";
-            p_Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
             var l_Buffer = Encoding.UTF8.GetBytes(p_Body);
             p_Response.ContentLength64 = l_Buffer.Length;
-            p_Response.OutputStream.Write(l_Buffer, 0, l_Buffer.Length);
-            p_Response.OutputStream.Close();
+
+            using (var l_Stream = p_Response.OutputStream)
+            {
+                l_Stream.Write(l_Buffer, 0, l_Buffer.Length);
+            }
         }
     }
 }

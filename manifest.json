@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/beat-saber-modding-group/BSIPA-MetadataFileSchema/master/Schema.json",
   "id": "BeatSaberPlus_HTTPHook",
   "name": "BeatSaberPlus_HTTPHook",
-  "author": "Community",
+  "author": "HakuTheWolfSpirit",
   "version": "1.0.0",
   "description": "HTTP webhook trigger for ChatIntegrations",
   "gameVersion": "1.40.8",
