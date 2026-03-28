@@ -23,7 +23,6 @@ A [BeatSaberPlus](https://github.com/hardcpp/BeatSaberPlus) module that adds HTT
 2. Create a new event of type **HTTPHook**
 3. Set the **Hook Name** (e.g. `boop`)
 4. Add any actions you want triggered (send chat message, emote rain, OBS scene switch, etc.)
-5. Enable the event
 
 ### 2. Trigger it
 
