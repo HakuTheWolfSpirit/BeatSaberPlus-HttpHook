@@ -3,7 +3,7 @@
   "id": "BeatSaberPlus_HTTPHook",
   "name": "BeatSaberPlus_HTTPHook",
   "author": "HakuTheWolfSpirit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "HTTP webhook trigger for ChatIntegrations",
   "gameVersion": "1.40.8",
   "dependsOn": {
