@@ -75,10 +75,12 @@ The action fails (and stops the event's action chain) if the URL is invalid, the
 
 ### Streamer.bot example
 
-1. In Streamer.bot open **Servers/Clients** > **WebSocket Servers**, add a server (e.g. `127.0.0.1:8080`) and start it.
-2. Create an action and add the trigger **Core > WebSocket > WebSocket Custom Server Message**, selecting that server.
-3. Add a sub-action such as **Core > Logic > If/Else** comparing the `%message%` variable, or branch on it however you like.
-4. In Beat Saber, add a **WebSocket_SendMessage** action to your event with URL `ws://127.0.0.1:8080/` and the message text you compare against.
+1. In Streamer.bot open **Servers/Clients** > **Custom WebSocket Servers**, add a server (e.g. `127.0.0.1`, port `9090`, endpoint `/bs`) and start it.
+2. Create an action and add the trigger **Core > Websocket > Custom Server > Custom Server Message**, selecting that server.
+3. Add a sub-action such as **Core > Logic > If/Else** comparing the `%data%` variable, which holds the received message.
+4. In Beat Saber, add a **WebSocket > SendMessage** action to your event with URL `ws://127.0.0.1:9090/bs` and the message text you compare against.
+
+Full walkthrough with screenshots: [docs/StreamerBot-WebSocket-Setup.md](docs/StreamerBot-WebSocket-Setup.md).
 
 ## Building from source
 
