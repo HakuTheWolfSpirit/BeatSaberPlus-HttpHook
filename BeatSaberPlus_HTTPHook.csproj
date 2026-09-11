@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BSIPA.cs" />
+    <Compile Include="ChatIntegrations\Actions\WebSocket_SendMessage.cs" />
+    <Compile Include="Models\Actions\WebSocket_SendMessage.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="HTTPHook.cs" />
     <Compile Include="HTTPHookConfig.cs" />
@@ -80,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="build.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

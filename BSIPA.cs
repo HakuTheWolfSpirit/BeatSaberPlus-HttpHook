@@ -1,4 +1,7 @@
+using BeatSaberPlus_HTTPHook.ChatIntegrations.Actions;
 using IPA;
+
+using CI = ChatPlexMod_ChatIntegrations.ChatIntegrations;
 
 namespace BeatSaberPlus_HTTPHook
 {
@@ -19,6 +22,7 @@ namespace BeatSaberPlus_HTTPHook
                 () => new ChatIntegrations.Events.HTTPHookEvent(),
                 true
             );
+            CI.RegisterActionType("WebSocket_SendMessage", () => new WebSocket_SendMessage());
         }
 
         [OnDisable]

@@ -61,13 +61,32 @@ The server listens on all network interfaces, so you can trigger hooks from othe
 curl http://192.168.1.100:2948/hook/boop
 ```
 
+## WebSocket action
+
+The mod also adds a **WebSocket_SendMessage** action usable in any Chat Integrations event. When the event fires, the action opens a WebSocket connection to the configured URL, sends one text message and closes the connection again. Nothing stays connected between triggers.
+
+Action settings:
+
+- **WebSocket URL**: `ws://` or `wss://` address of the receiver, e.g. `ws://127.0.0.1:8080/`
+- **Message**: the text to send. Event values can be inserted as `$Name` (e.g. `$HookName`, `$UserName`); the keyboard modal lists the ones the event provides.
+- **Test**: sends the message right away, without variable substitution, and reports success or the error.
+
+The action fails (and stops the event's action chain) if the URL is invalid, the server cannot be reached, or connect plus send takes longer than 5 seconds.
+
+### Streamer.bot example
+
+1. In Streamer.bot open **Servers/Clients** > **WebSocket Servers**, add a server (e.g. `127.0.0.1:8080`) and start it.
+2. Create an action and add the trigger **Core > WebSocket > WebSocket Custom Server Message**, selecting that server.
+3. Add a sub-action such as **Core > Logic > If/Else** comparing the `%message%` variable, or branch on it however you like.
+4. In Beat Saber, add a **WebSocket_SendMessage** action to your event with URL `ws://127.0.0.1:8080/` and the message text you compare against.
+
 ## Building from source
 
 1. Clone this repository
-2. Create a `Refs` folder (or junction/symlink) pointing to your Beat Saber installation directory
-3. Open `BeatSaberPlus_HTTPHook.sln` in Visual Studio or build with:
+2. Run `.\build.ps1` (creates the `Refs` junction, builds and deploys into the configured BSManager instance; `-NoDeploy` to only build, `-BeatSaberDir` to pick another instance)
+3. Or create `Refs` yourself pointing to your Beat Saber installation and build with:
    ```
-   dotnet msbuild BeatSaberPlus_HTTPHook.csproj -p:Configuration=Release
+   dotnet build BeatSaberPlus_HTTPHook.csproj -c Release
    ```
 4. Output: `bin/Release/BeatSaberPlus_HTTPHook.dll`
 
